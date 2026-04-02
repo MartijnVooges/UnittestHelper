@@ -1,0 +1,27 @@
+on:
+  workflow_call:
+
+jobs:
+  automated-tests:
+    name: PHPUnit tests
+    runs-on: ubuntu-latest
+    env:
+      APP_ENV: test
+
+    steps:
+      - name: Git Checkout source branch (${{ github.head_ref }})
+        uses: actions/checkout@v4
+
+      - name: Download Composer Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: vendor_artifacts
+
+      - name: Setup PHP and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: intl, soap, xsl, zip, uuid
+
+      - name: Testing - Unittest
+        run: php vendor/bin/phpunit

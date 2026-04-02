@@ -1,0 +1,25 @@
+{
+    "name": "martijnvooges/common-tools",
+    "description": "Tools to make writing tests a lot quicker",
+    "type": "symfony-bundle",
+    "repositories": [{"type": "vcs", "url": "git@github.com:MartijnVooges/UnittestHelper.git"}],
+    "autoload": {
+        "psr-4": {
+            "MartijnVooges\\Unittest\\": "src/Unittest/",
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Martijn Vooges",
+            "email": "martijn@vooges.net"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-symfony": "^2.0",
+        "phpunit/phpunit": "^12"
+    }
+}

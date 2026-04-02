@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd" backupGlobals="false" colors="true" cacheDirectory=".phpunit.cache">
+  <php>
+    <!--    <ini name="error_reporting" value="-1"/>-->
+    <!--    <server name="APP_ENV" value="test" force="true"/>-->
+    <!--    <server name="SHELL_VERBOSITY" value="-1"/>-->
+    <!--    <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>-->
+    <!--    <server name="SYMFONY_PHPUNIT_REQUIRE" value="phpunit/php-code-coverage:9.2.10" />-->
+    <!--    <server name="SYMFONY_PHPUNIT_VERSION" value="9.5"/>-->
+        <server name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
+    <!--    <env name="XDEBUG_MODE" value="coverage"/>-->
+    <!-- Don't complain about indirect deprecations, we update what we can -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="quiet[]=indirect"/>
+    <!-- ###- doctrine/doctrine-bundle ### -->
+  </php>
+  <testsuites>
+    <testsuite name="Test Suite">
+      <directory>tests</directory>
+      <exclude>./src/Voter/*Interface.php</exclude>
+    </testsuite>
+  </testsuites>
+  <!--  <listeners>-->
+  <!--    <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>-->
+  <!--  </listeners>-->
+  <source>
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </source>
+</phpunit>

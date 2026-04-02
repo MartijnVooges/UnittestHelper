@@ -1,0 +1,47 @@
+on:
+  workflow_call:
+
+env:
+  COMPOSER_AUTH: "${{ secrets.CI_COMPOSER_AUTH_JSON }}"
+
+jobs:
+  composer-install:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Git Checkout source branch (${{ github.head_ref }})
+        uses: actions/checkout@v4
+
+      - name: Define composer cache dir
+        id: custom-vars
+        run: |
+          echo "composer_cache_dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Setup PHP with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: intl, soap, xsl, zip, uuid
+          tools: composer:v2
+
+      - name: Load Composer cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.custom-vars.outputs.composer_cache_dir }}
+          key: "${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}"
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Composer install
+        run: |
+          composer install --no-progress --no-scripts -q
+          echo "¯\_(ツ)_/¯" > dit-bestand-moet-for-some-reason-bestaan-anders-cached-ie-vendor-verkeerd.txt
+
+      - name: Upload Composer Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 1
+          compression-level: 0
+          name: vendor_artifacts
+          path: |
+            vendor
+            bestand-moet-for-some-reason-bestaan-anders-cached-ie-vendor-verkeerd.txt

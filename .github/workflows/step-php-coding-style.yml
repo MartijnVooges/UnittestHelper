@@ -1,0 +1,64 @@
+on:
+  workflow_call:
+
+jobs:
+  php-cs:
+    name: PHP CS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: technote-space/get-diff-action@v6
+        if: ${{ always() }}
+        id: git_diff
+        with:
+          PATTERNS: |
+            **/*.php
+
+      - name: Git Checkout source branch (${{ github.head_ref }})
+        uses: actions/checkout@v4
+
+      - name: Download Composer Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: vendor_artifacts
+
+      - name: Setup PHP and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: intl, soap, xsl, zip, uuid
+
+      - name: Run PHP-CS
+        run: php vendor/bin/phpcs -h ${{ env.GIT_DIFF }}
+
+  phpstan:
+    name: PHP Stan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout source branch (${{ github.head_ref }})
+        uses: actions/checkout@v4
+
+      - name: Download Composer Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: vendor_artifacts
+
+      - name: Setup PHP and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: intl, soap, xsl, zip, uuid
+
+      # Cache on run-id (never a hit, so always save), try to restore from this branch
+      # (earlier runs), then from parent branch (usually develop).
+      - name: Load PHPStan Cache
+        uses: actions/cache@v4
+        with:
+          path: ./var/cache/phpstan
+          key: "${{ runner.os }}-phpstan-${{ github.ref_name }}-${{ github.run_id }}"
+          restore-keys: |
+            ${{ runner.os }}-phpstan-${{ github.ref_name }}-
+            ${{ runner.os }}-phpstan-
+
+      - name: Run PHPStan (PHP Static Analysis)
+        run: |
+          php vendor/bin/phpstan --memory-limit=2G --no-progress analyze ${{ env.GIT_DIFF }}

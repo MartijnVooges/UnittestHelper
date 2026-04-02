@@ -1,0 +1,38 @@
+name: Continuous Integration on Pull Request
+
+on:
+  workflow_call:
+
+  pull_request:
+
+  # Because PRs don't run tests, re-run after merge.
+  push:
+    branches:
+      - 'develop'
+      - 'main'
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}"
+  cancel-in-progress: true
+
+env:
+  COMPOSER_AUTH: "${{ secrets.CI_COMPOSER_AUTH_JSON }}"
+  PHP_VERSION: "8.5"
+  APP_ENV: "test"
+
+jobs:
+  ########################################################################################################################
+  composer-install:
+    name: Composer Setup
+    uses: ./.github/workflows/step-composer-install.yml
+    secrets: inherit
+
+  php-code-style:
+    name: Code Style
+    needs: 'composer-install'
+    uses: ./.github/workflows/step-php-coding-style.yml
+
+  automated-tests:
+    name: Tests
+    needs: ['composer-install']
+    uses: ./.github/workflows/step-automated-tests.yml
