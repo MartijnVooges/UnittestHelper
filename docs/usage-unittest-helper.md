@@ -2,18 +2,13 @@
 This package offers the UnittestHelper to make writing test a lot simpler, mainly by reducing the amount of boilerplate, result in more clear code.
 
 ## Setup
-- Add repository to composer
+- Add repository to composer.json
   ```yaml
-    "repositories": [..., {"type": "vcs", "url": "git@github.com:MartijnVooges/common-tool.git"}],
+    "repositories": [..., {"type": "vcs", "url": "git@github.com:MartijnVooges/UnittestHelper.git"}],
   ```
-- Add package
   ```bash
-  composer require martijnvooges/common-tools
+  composer require martijnvooges/unittest-helper
   ```
-
-
-## Configuration
-No configuration is required.
 
 ## Implementation
 ### UnittestHelper
