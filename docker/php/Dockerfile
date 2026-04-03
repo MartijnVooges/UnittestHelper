@@ -10,4 +10,6 @@ RUN docker-php-ext-install pdo pdo_mysql intl zip
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/common_tools
+WORKDIR /var/www/unittest_helper
+
+CMD ["sleep", "infinity"]

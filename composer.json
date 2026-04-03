@@ -1,5 +1,5 @@
 {
-    "name": "martijnvooges/common-tools",
+    "name": "martijnvooges/unittest-helper",
     "description": "Tools to make writing tests a lot quicker",
     "type": "symfony-bundle",
     "repositories": [{"type": "vcs", "url": "git@github.com:MartijnVooges/UnittestHelper.git"}],
