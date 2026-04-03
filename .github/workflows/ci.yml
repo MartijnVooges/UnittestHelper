@@ -16,7 +16,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  COMPOSER_AUTH: "${{ secrets.CI_COMPOSER_AUTH_JSON }}"
   PHP_VERSION: "8.5"
   APP_ENV: "test"
 
